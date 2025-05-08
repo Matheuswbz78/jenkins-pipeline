@@ -1,3 +1,5 @@
+version: '3.8'  # Versão do Docker Compose (ajuste conforme necessário)
+
 services:
   db:
     image: mysql:8.0
@@ -13,7 +15,9 @@ services:
     volumes:
       - db_data:/var/lib/mysql
       - ./db-init:/docker-entrypoint-initdb.d
-    
+    networks:
+      - app-net
+
   web:
     image: matheuswbz78/web-app:latest
     container_name: web
@@ -28,7 +32,7 @@ services:
   report:
     image: matheuswbz78/report-app:latest
     container_name: report
-    restart : always 
+    restart: always
     depends_on:
       - db
     ports:
@@ -40,4 +44,5 @@ volumes:
   db_data:
 
 networks:
-  app-net
+  app-net:
+    driver: bridge
